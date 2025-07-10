@@ -20,6 +20,8 @@ CREATE TABLE usuario (
     contrasena VARCHAR(100) NOT NULL
 );
 
+alter table usuario add column nombre VARCHAR(100) NOT null default '';
+
 
 CREATE TABLE cuenta (
     id SERIAL PRIMARY KEY,
