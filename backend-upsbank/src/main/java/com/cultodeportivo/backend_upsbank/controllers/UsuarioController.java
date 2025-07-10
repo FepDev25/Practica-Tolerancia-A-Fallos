@@ -45,7 +45,7 @@ public class UsuarioController {
     }
 
     @PostMapping()
-    public ResponseEntity<?> postMethodName(@Valid @RequestBody Usuario user, BindingResult result) {
+    public ResponseEntity<?> createUsuario(@Valid @RequestBody Usuario user, BindingResult result) {
         this.userValidation.validate(user, result);
         if (result.hasFieldErrors()) {
             return validation(result); 
@@ -55,7 +55,7 @@ public class UsuarioController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> putMethodName(@Valid @RequestBody Usuario user, BindingResult result, @PathVariable Long id) {
+    public ResponseEntity<?> updateUsuario(@Valid @RequestBody Usuario user, BindingResult result, @PathVariable Long id) {
         this.userValidation.validate(user, result);
         if (result.hasFieldErrors()) {
             return validation(result); 
@@ -67,7 +67,7 @@ public class UsuarioController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteMethodName(@PathVariable Long id) {
+    public ResponseEntity<?> deleteUsuario(@PathVariable Long id) {
         Optional<Usuario> op = this.usuarioService.delete(id);
         return op.map( r -> ResponseEntity.ok(id))
                 .orElseGet(() -> ResponseEntity.notFound().build());

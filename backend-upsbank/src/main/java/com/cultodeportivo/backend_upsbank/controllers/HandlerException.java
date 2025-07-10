@@ -19,82 +19,55 @@ import com.cultodeportivo.backend_upsbank.exceptions.FondosInsuficientesExceptio
 
 @RestControllerAdvice
 public class HandlerException {
-    
+
     @ExceptionHandler(UserNotFoundException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public Map<String, Object> userNotFound(Exception ex) {
-        return Map.of(
-            "message", ex.getMessage(),
-            "error", "El usuario no existe",
-            "status", HttpStatus.INTERNAL_SERVER_ERROR.value(),
-            "date", new Date()
-        );
+        return buildErrorResponse(ex, "El usuario no existe", HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(EstadoCuentaNotFoundException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public Map<String, Object> estadoCuentaNotFound(Exception ex) {
-        return Map.of(
-            "message", ex.getMessage(),
-            "error", "El estado de la cuenta no existe",
-            "status", HttpStatus.INTERNAL_SERVER_ERROR.value(),
-            "date", new Date()
-        );
+        return buildErrorResponse(ex, "El estado de la cuenta no existe", HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(CuentaNotFoundException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public Map<String, Object> cuentaNotFound(Exception ex) {
-        return Map.of(
-            "message", ex.getMessage(),
-            "error", "La cuenta no existe",
-            "status", HttpStatus.INTERNAL_SERVER_ERROR.value(),
-            "date", new Date()
-        );
+        return buildErrorResponse(ex, "La cuenta no existe", HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(TipoTransaccionNotFoundException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public Map<String, Object> tipoTransaccionNotFound(Exception ex) {
-        return Map.of(
-            "message", ex.getMessage(),
-            "error", "El tipo de transaccion no existe",
-            "status", HttpStatus.INTERNAL_SERVER_ERROR.value(),
-            "date", new Date()
-        );
+        return buildErrorResponse(ex, "El tipo de transacción no existe", HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(CuentaNoActivaException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, Object> cuentaNoActiva(Exception ex) {
-        return Map.of(
-            "message", ex.getMessage(),
-            "error", "La cuenta no esta activa",
-            "status", HttpStatus.INTERNAL_SERVER_ERROR.value(),
-            "date", new Date()
-        );
+        return buildErrorResponse(ex, "La cuenta no está activa", HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(FondosInsuficientesException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, Object> fondosInsuficientes(Exception ex) {
-        return Map.of(
-            "message", ex.getMessage(),
-            "error", "Fondos insuficientes",
-            "status", HttpStatus.INTERNAL_SERVER_ERROR.value(),
-            "date", new Date()
-        );
+        return buildErrorResponse(ex, "Fondos insuficientes", HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, Object> fechaMalFormato(Exception ex) {
+        return buildErrorResponse(ex, "El formato de la fecha es incorrecto. Ej: 2025-12-31T00:00:00", HttpStatus.BAD_REQUEST);
+    }
+
+    private Map<String, Object> buildErrorResponse(Exception ex, String error, HttpStatus status) {
         return Map.of(
             "message", ex.getMessage(),
-            "error", "El formato de la fecha es incorrecto. Ej: 2025-12-31T00:00:00",
-            "status", HttpStatus.INTERNAL_SERVER_ERROR.value(),
+            "error", error,
+            "status", status.value(),
             "date", new Date()
         );
     }
-
 }
