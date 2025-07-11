@@ -5,19 +5,21 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.cultodeportivo.backend_upsbank.exceptions.CuentaNoActivaException;
 import com.cultodeportivo.backend_upsbank.exceptions.CuentaNotFoundException;
 import com.cultodeportivo.backend_upsbank.exceptions.EstadoCuentaNotFoundException;
-import com.cultodeportivo.backend_upsbank.exceptions.UserNotFoundException;
-import com.cultodeportivo.backend_upsbank.exceptions.TipoTransaccionNotFoundException;
-import com.cultodeportivo.backend_upsbank.exceptions.CuentaNoActivaException;
 import com.cultodeportivo.backend_upsbank.exceptions.FondosInsuficientesException;
+import com.cultodeportivo.backend_upsbank.exceptions.TipoTransaccionNotFoundException;
+import com.cultodeportivo.backend_upsbank.exceptions.UserNotFoundException;
 
 
 @RestControllerAdvice
+@CrossOrigin(origins = "http://localhost:4200", originPatterns = "*")
 public class HandlerException {
 
     @ExceptionHandler(UserNotFoundException.class)
