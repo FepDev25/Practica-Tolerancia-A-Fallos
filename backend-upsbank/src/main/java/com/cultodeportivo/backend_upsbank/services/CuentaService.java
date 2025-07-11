@@ -1,5 +1,7 @@
 package com.cultodeportivo.backend_upsbank.services;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -7,8 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.cultodeportivo.backend_upsbank.dao.CuentaDAO;
-import com.cultodeportivo.backend_upsbank.exceptions.EstadoCuentaNotFoundException;
 import com.cultodeportivo.backend_upsbank.exceptions.CuentaNotFoundException;
+import com.cultodeportivo.backend_upsbank.exceptions.EstadoCuentaNotFoundException;
 import com.cultodeportivo.backend_upsbank.models.Cuenta;
 import com.cultodeportivo.backend_upsbank.models.EstadoCuenta;
 import com.cultodeportivo.backend_upsbank.models.Usuario;
@@ -56,6 +58,17 @@ public class CuentaService {
 
         return cuentaRepository.save(cuenta);
     }
+
+    @Transactional
+    public Cuenta crearCuentaParaUsuario(Long userId) {
+        CuentaDAO cuentaDAO = new CuentaDAO();
+        cuentaDAO.setSaldo(BigDecimal.ZERO);
+        cuentaDAO.setFechaCreacion(LocalDateTime.now());
+        cuentaDAO.setEstadoCuentaId(1L);
+        cuentaDAO.setUsuarioId(userId);
+        return this.save(cuentaDAO);
+    }
+
 
     @Transactional
     public Optional<Cuenta> updateCuenta (Long id, CuentaDAO cuentaDAO) {

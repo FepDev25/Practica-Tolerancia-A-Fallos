@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cultodeportivo.backend_upsbank.models.Cuenta;
 import com.cultodeportivo.backend_upsbank.models.LoginRequest;
 import com.cultodeportivo.backend_upsbank.models.Usuario;
+import com.cultodeportivo.backend_upsbank.services.RegistroService;
 import com.cultodeportivo.backend_upsbank.services.UsuarioService;
 import com.cultodeportivo.backend_upsbank.validations.UserValidation;
 import static com.cultodeportivo.backend_upsbank.validations.ValidationResponse.validation;
@@ -24,14 +27,17 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/usuarios")
+@CrossOrigin(origins = "http://localhost:4200", originPatterns = "*")
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
     private final UserValidation userValidation;
+    private final RegistroService registroService;
 
-    public UsuarioController(UsuarioService usuarioService, UserValidation userValidation) {
+    public UsuarioController(UsuarioService usuarioService, UserValidation userValidation, RegistroService registroService) {
         this.usuarioService = usuarioService;
         this.userValidation = userValidation;
+        this.registroService = registroService;
     }
 
     @GetMapping()
@@ -42,6 +48,17 @@ public class UsuarioController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getUsuariosById(@PathVariable Long id) {
         return ResponseEntity.ok(this.usuarioService.findById(id));
+    }
+
+    @PostMapping("/registro")
+    public ResponseEntity<?> registrarUsuarioConCuenta(@Valid @RequestBody Usuario user, BindingResult result) {
+        this.userValidation.validate(user, result);
+        if (result.hasFieldErrors()) {
+            return validation(result);
+        }
+
+        Cuenta cuentaRegistrado = this.registroService.registrarUsuarioConCuenta(user);
+        return ResponseEntity.ok(cuentaRegistrado);
     }
 
     @PostMapping()

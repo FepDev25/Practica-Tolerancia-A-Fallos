@@ -1,0 +1,165 @@
+<!-- Operations Section -->
+<section id="operaciones" class="py-16 bg-gray-50">
+  <div class="container mx-auto px-4">
+      <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">Realiza tus Operaciones</h2>
+
+      <!-- Tabs Navigation -->
+      <div class="flex flex-wrap justify-center mb-8">
+          <button (click)="changeTab('create-account')" [ngClass]="{'text-blue-600 border-b-2 border-blue-600': activeTab === 'create-account'}" class="tab-btn px-6 py-3 font-medium rounded-t-lg border-b-2 border-transparent hover:text-blue-600 transition">
+              <i class="fas fa-plus-circle mr-2"></i>Crear Cuenta
+          </button>
+          <button *ngIf="!usuarioService.isLoggedIn()" (click)="changeTab('login')" [ngClass]="{'text-blue-600 border-b-2 border-blue-600': activeTab === 'login'}" class="tab-btn px-6 py-3 font-medium rounded-t-lg border-b-2 border-transparent hover:text-blue-600 transition">
+            <i class="fas fa-sign-in-alt mr-2"></i>Login
+          </button>
+          <button *ngIf="usuarioService.isLoggedIn()" (click)="changeTab('check-balance')" [ngClass]="{'text-blue-600 border-b-2 border-blue-600': activeTab === 'check-balance'}" class="tab-btn px-6 py-3 font-medium rounded-t-lg border-b-2 border-transparent hover:text-blue-600 transition">
+              <i class="fas fa-search-dollar mr-2"></i>Consultar Saldo
+          </button>
+          <button *ngIf="usuarioService.isLoggedIn()" (click)="changeTab('deposit')" [ngClass]="{'text-blue-600 border-b-2 border-blue-600': activeTab === 'deposit'}" class="tab-btn px-6 py-3 font-medium rounded-t-lg border-b-2 border-transparent hover:text-blue-600 transition">
+              <i class="fas fa-hand-holding-usd mr-2"></i>Depositar
+          </button>
+          <button *ngIf="usuarioService.isLoggedIn()" (click)="changeTab('withdraw')" [ngClass]="{'text-blue-600 border-b-2 border-blue-600': activeTab === 'withdraw'}" class="tab-btn px-6 py-3 font-medium rounded-t-lg border-b-2 border-transparent hover:text-blue-600 transition">
+              <i class="fas fa-money-bill-wave mr-2"></i>Retirar
+          </button>
+          <button *ngIf="usuarioService.isLoggedIn()" (click)="changeTab('transfer')" [ngClass]="{'text-blue-600 border-b-2 border-blue-600': activeTab === 'transfer'}" class="tab-btn px-6 py-3 font-medium rounded-t-lg border-b-2 border-transparent hover:text-blue-600 transition">
+              <i class="fas fa-exchange-alt mr-2"></i>Transferir
+          </button>
+          <button *ngIf="usuarioService.isLoggedIn()" (click)="onLogout()" class="tab-btn px-6 py-3 font-medium rounded-t-lg border-b-2 border-transparent hover:text-red-600 transition">
+            <i class="fas fa-sign-out-alt mr-2"></i>Logout
+          </button>
+      </div>
+
+
+      <!-- Tab Contents -->
+      <div *ngIf="activeTab === 'create-account'">
+          <!-- Create Account Tab -->
+          <div class="tab-content active"  id="create-account">
+            <h3 class="text-2xl font-semibold mb-4 text-gray-800">Crear Nueva Cuenta</h3>
+
+            <form [formGroup]="createAccountForm" (ngSubmit)="onCreateAccount()">
+              <div class="mb-4">
+                <label class="block text-gray-700 mb-2">Nombre Completo</label>
+                <input type="text" formControlName="nombre" class="w-full px-4 py-2 border rounded-lg">
+              </div>
+              <div class="mb-4">
+                <label class="block text-gray-700 mb-2">Correo Electrónico</label>
+                <input type="email" formControlName="correo" class="w-full px-4 py-2 border rounded-lg">
+              </div>
+              <div class="mb-4">
+                <label class="block text-gray-700 mb-2">Contraseña</label>
+                <input type="password" formControlName="contrasena" class="w-full px-4 py-2 border rounded-lg">
+              </div>
+              <button type="submit" class="bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 w-full">
+                <i class="fas fa-user-plus mr-2"></i>Crear Usuario
+              </button>
+            </form>
+
+            <div *ngIf="successMessage" class="mt-4 bg-green-100 text-green-700 p-4 rounded">{{ successMessage }}</div>
+            <div *ngIf="errorMessage" class="mt-4 bg-red-100 text-red-700 p-4 rounded">{{ errorMessage }}</div>
+          </div>
+      </div>
+
+      <!-- Login Tab -->
+      <div *ngIf="activeTab === 'login'">
+        <h3 class="text-2xl font-semibold mb-4 text-gray-800">Iniciar Sesión</h3>
+        <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+          <div class="mb-4">
+            <label class="block text-gray-700 mb-2">Correo Electrónico</label>
+            <input type="email" formControlName="correo" class="w-full px-4 py-2 border rounded-lg">
+          </div>
+          <div class="mb-4">
+            <label class="block text-gray-700 mb-2">Contraseña</label>
+            <input type="password" formControlName="contrasena" class="w-full px-4 py-2 border rounded-lg">
+          </div>
+          <button type="submit" class="bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 w-full">
+            <i class="fas fa-sign-in-alt mr-2"></i>Login
+          </button>
+        </form>
+        <div *ngIf="successMessage" class="mt-4 bg-green-100 text-green-700 p-4 rounded">{{ successMessage }}</div>
+        <div *ngIf="errorMessage" class="mt-4 bg-red-100 text-red-700 p-4 rounded">{{ errorMessage }}</div>
+      </div>
+
+      <!-- Check Balance Tab -->
+      <div *ngIf="activeTab === 'check-balance'">
+          <h3 class="text-2xl font-semibold mb-4 text-gray-800">Consultar Saldo</h3>
+          <form id="checkBalanceForm">
+              <div class="mb-4">
+                  <label for="accountId" class="block text-gray-700 mb-2">Número de Cuenta</label>
+                  <input type="text" id="accountId" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+              </div>
+              <button type="submit" class="bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition duration-300 w-full">
+                  <i class="fas fa-search-dollar mr-2"></i>Consultar Saldo
+              </button>
+          </form>
+          <div id="balanceResult" class="mt-4 p-4 rounded-lg hidden">
+              <div class="flex items-center">
+                  <i class="fas fa-wallet text-3xl mr-4 text-blue-600"></i>
+                  <div>
+                      <h4 class="font-semibold">Saldo disponible</h4>
+                      <p id="balanceAmount" class="text-2xl font-bold">$0.00</p>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+      <!-- Deposit Tab -->
+      <div *ngIf="activeTab === 'deposit'">
+          <h3 class="text-2xl font-semibold mb-4 text-gray-800">Depositar Dinero</h3>
+          <form id="depositForm">
+              <div class="mb-4">
+                  <label for="depositAccountId" class="block text-gray-700 mb-2">Número de Cuenta</label>
+                  <input type="text" id="depositAccountId" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+              </div>
+              <div class="mb-4">
+                  <label for="depositAmount" class="block text-gray-700 mb-2">Cantidad a Depositar ($)</label>
+                  <input type="number" id="depositAmount" min="0.01" step="0.01" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+              </div>
+              <button type="submit" class="bg-green-600 text-white py-3 px-6 rounded-lg hover:bg-green-700 transition duration-300 w-full">
+                  <i class="fas fa-hand-holding-usd mr-2"></i>Realizar Depósito
+              </button>
+          </form>
+          <div id="depositResult" class="mt-4 p-4 rounded-lg hidden"></div>
+      </div>
+
+      <!-- Withdraw Tab -->
+      <div *ngIf="activeTab === 'withdraw'">
+          <h3 class="text-2xl font-semibold mb-4 text-gray-800">Retirar Dinero</h3>
+          <form id="withdrawForm">
+              <div class="mb-4">
+                  <label for="withdrawAccountId" class="block text-gray-700 mb-2">Número de Cuenta</label>
+                  <input type="text" id="withdrawAccountId" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+              </div>
+              <div class="mb-4">
+                  <label for="withdrawAmount" class="block text-gray-700 mb-2">Cantidad a Retirar ($)</label>
+                  <input type="number" id="withdrawAmount" min="0.01" step="0.01" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+              </div>
+              <button type="submit" class="bg-yellow-600 text-white py-3 px-6 rounded-lg hover:bg-yellow-700 transition duration-300 w-full">
+                  <i class="fas fa-money-bill-wave mr-2"></i>Realizar Retiro
+              </button>
+          </form>
+          <div id="withdrawResult" class="mt-4 p-4 rounded-lg hidden"></div>
+      </div>
+
+      <!-- Transfer Tab -->
+      <div *ngIf="activeTab === 'transfer'">
+          <h3 class="text-2xl font-semibold mb-4 text-gray-800">Transferir Dinero</h3>
+          <form id="transferForm">
+              <div class="mb-4">
+                  <label for="originAccountId" class="block text-gray-700 mb-2">Cuenta de Origen</label>
+                  <input type="text" id="originAccountId" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+              </div>
+              <div class="mb-4">
+                  <label for="destinationAccountId" class="block text-gray-700 mb-2">Cuenta de Destino</label>
+                  <input type="text" id="destinationAccountId" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+              </div>
+              <div class="mb-4">
+                  <label for="transferAmount" class="block text-gray-700 mb-2">Cantidad a Transferir ($)</label>
+                  <input type="number" id="transferAmount" min="0.01" step="0.01" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+              </div>
+              <button type="submit" class="bg-purple-600 text-white py-3 px-6 rounded-lg hover:bg-purple-700 transition duration-300 w-full">
+                  <i class="fas fa-exchange-alt mr-2"></i>Realizar Transferencia
+              </button>
+          </form>
+          <div id="transferResult" class="mt-4 p-4 rounded-lg hidden"></div>
+      </div>
+  </div>
+</section>
