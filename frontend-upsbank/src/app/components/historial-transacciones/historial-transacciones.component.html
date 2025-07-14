@@ -24,10 +24,8 @@
                   <tr *ngFor="let trans of transacciones" class="hover:bg-gray-50">
                     <td class="px-6 py-4 whitespace-nowrap">{{ trans.fecha | date:'short' }}</td>
                     
-                    <!-- Corregido para mostrar el nombre del tipo de transacción -->
                     <td class="px-6 py-4 whitespace-nowrap">{{ trans.tipoTransaccion?.nombre }}</td>
               
-                    <!-- Corregido para mostrar el ID de la cuenta origen (si existe), si no, la destino -->
                     <td class="px-6 py-4 whitespace-nowrap">
                       {{ trans.cuentaOrigen?.id || trans.cuentaDestino?.id }}
                     </td>
