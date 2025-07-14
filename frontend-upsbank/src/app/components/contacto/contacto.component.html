@@ -34,7 +34,8 @@
           <div class="md:w-1/2">
               <div class="bg-white p-6 rounded-xl shadow-md">
                   <h3 class="text-xl font-semibold mb-4 text-gray-800">Envíanos un Mensaje</h3>
-                  <form>
+                  <form [formGroup]="contactoForm" (ngSubmit)="onSubmit()">
+
                       <div class="mb-4">
                           <label for="contactName" class="block text-gray-700 mb-2">Nombre</label>
                           <input type="text" id="contactName" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
@@ -50,6 +51,13 @@
                       <button type="submit" class="bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition duration-300 w-full">
                           <i class="fas fa-paper-plane mr-2"></i>Enviar Mensaje
                       </button>
+                      <div *ngIf="mensajeExito" class="mt-4 bg-green-100 text-green-700 p-4 rounded">
+                        {{ mensajeExito }}
+                      </div>
+                      <div *ngIf="mensajeError" class="mt-4 bg-red-100 text-red-700 p-4 rounded">
+                        {{ mensajeError }}
+                      </div>
+                      
                   </form>
               </div>
           </div>

@@ -1,31 +1,38 @@
-<!-- Header -->
 <header class="gradient-bg text-white shadow-lg">
-  <div class="container mx-auto px-4 py-6">
+    <div class="container mx-auto px-4 py-6">
       <div class="flex justify-between items-center">
-          <div class="flex items-center space-x-2">
-              <i class="fas fa-university text-3xl"></i>
-              <h1 class="text-2xl font-bold">UPS-Bank</h1>
-          </div>
-          <nav class="hidden md:block">
-              <ul class="flex space-x-6">
-                  <li><a href="#inicio" class="hover:text-blue-200 transition">Inicio</a></li>
-                  <li><a href="#servicios" class="hover:text-blue-200 transition">Servicios</a></li>
-                  <li><a href="#operaciones" class="hover:text-blue-200 transition">Operaciones</a></li>
-                  <li><a href="#contacto" class="hover:text-blue-200 transition">Contacto</a></li>
-              </ul>
-          </nav>
-          <button class="md:hidden text-2xl" id="menu-toggle">
-              <i class="fas fa-bars"></i>
-          </button>
+        <div class="flex items-center space-x-2">
+          <i class="fas fa-university text-3xl"></i>
+          <h1 class="text-2xl font-bold">UPS-Bank</h1>
+        </div>
+        <nav class="hidden md:block">
+          <ul class="flex space-x-6">
+            <li><a href="#inicio" class="hover:text-blue-200 transition">Inicio</a></li>
+            <li><a href="#servicios" class="hover:text-blue-200 transition">Servicios</a></li>
+            <li><a href="#operaciones" class="hover:text-blue-200 transition">Operaciones</a></li>
+            <li><a href="#contacto" class="hover:text-blue-200 transition">Contacto</a></li>
+            <li *ngIf="isLoggedIn()">
+              <button (click)="logout()" class="hover:text-red-200 transition">Cerrar sesión</button>
+            </li>
+          </ul>
+        </nav>
+        <button class="md:hidden text-2xl" (click)="toggleMobileMenu()">
+          <i class="fas fa-bars"></i>
+        </button>
       </div>
-  </div>
-  <!-- Mobile menu -->
-  <div class="md:hidden hidden bg-blue-900 py-4 px-4" id="mobile-menu">
-      <ul class="space-y-3">
-          <li><a href="#inicio" class="block hover:text-blue-200 transition">Inicio</a></li>
-          <li><a href="#servicios" class="block hover:text-blue-200 transition">Servicios</a></li>
-          <li><a href="#operaciones" class="block hover:text-blue-200 transition">Operaciones</a></li>
-          <li><a href="#contacto" class="block hover:text-blue-200 transition">Contacto</a></li>
+    </div>
+  
+    <!-- Mobile menu -->
+    <div class="md:hidden" [ngClass]="{ 'hidden': !mobileMenuVisible }">
+      <ul class="bg-blue-900 py-4 px-4 space-y-3">
+        <li><a href="#inicio" class="block hover:text-blue-200 transition">Inicio</a></li>
+        <li><a href="#servicios" class="block hover:text-blue-200 transition">Servicios</a></li>
+        <li><a href="#operaciones" class="block hover:text-blue-200 transition">Operaciones</a></li>
+        <li><a href="#contacto" class="block hover:text-blue-200 transition">Contacto</a></li>
+        <li *ngIf="isLoggedIn()">
+          <button (click)="logout()" class="text-red-200">Cerrar sesión</button>
+        </li>
       </ul>
-  </div>
-</header>
+    </div>
+  </header>
+  

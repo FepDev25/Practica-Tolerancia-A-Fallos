@@ -10,9 +10,10 @@ import { FooterComponent } from './components/footer/footer.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, HeaderComponent, HeroComponent, NuestrosServiciosComponent, OperacionesComponent, HistorialTransaccionesComponent, ContactoComponent, FooterComponent],
+  standalone: true,
+  imports: [RouterOutlet, HeroComponent, HeaderComponent, NuestrosServiciosComponent, OperacionesComponent, HistorialTransaccionesComponent, ContactoComponent, FooterComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent {
   title = 'frontend-upsbank';

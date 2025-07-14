@@ -78,88 +78,82 @@
         <div *ngIf="errorMessage" class="mt-4 bg-red-100 text-red-700 p-4 rounded">{{ errorMessage }}</div>
       </div>
 
-      <!-- Check Balance Tab -->
-      <div *ngIf="activeTab === 'check-balance'">
-          <h3 class="text-2xl font-semibold mb-4 text-gray-800">Consultar Saldo</h3>
-          <form id="checkBalanceForm">
-              <div class="mb-4">
-                  <label for="accountId" class="block text-gray-700 mb-2">Número de Cuenta</label>
-                  <input type="text" id="accountId" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
-              </div>
-              <button type="submit" class="bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition duration-300 w-full">
-                  <i class="fas fa-search-dollar mr-2"></i>Consultar Saldo
-              </button>
-          </form>
-          <div id="balanceResult" class="mt-4 p-4 rounded-lg hidden">
-              <div class="flex items-center">
-                  <i class="fas fa-wallet text-3xl mr-4 text-blue-600"></i>
-                  <div>
-                      <h4 class="font-semibold">Saldo disponible</h4>
-                      <p id="balanceAmount" class="text-2xl font-bold">$0.00</p>
-                  </div>
-              </div>
-          </div>
-      </div>
+        <!-- Consultar Saldo Tab -->
+    <div *ngIf="activeTab === 'check-balance'">
+        <h3 class="text-2xl font-semibold mb-4 text-gray-800">Consultar Saldo</h3>
+        <form [formGroup]="checkBalanceForm" (ngSubmit)="onConsultarSaldo()">
+        <div class="mb-4">
+            <label class="block text-gray-700 mb-2">Número de Cuenta</label>
+            <input type="text" formControlName="cuentaId" class="w-full px-4 py-2 border rounded-lg">
+        </div>
+        <button type="submit" class="bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 w-full">
+            <i class="fas fa-search-dollar mr-2"></i>Consultar Saldo
+        </button>
+        </form>
+    </div>
 
-      <!-- Deposit Tab -->
-      <div *ngIf="activeTab === 'deposit'">
-          <h3 class="text-2xl font-semibold mb-4 text-gray-800">Depositar Dinero</h3>
-          <form id="depositForm">
-              <div class="mb-4">
-                  <label for="depositAccountId" class="block text-gray-700 mb-2">Número de Cuenta</label>
-                  <input type="text" id="depositAccountId" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
-              </div>
-              <div class="mb-4">
-                  <label for="depositAmount" class="block text-gray-700 mb-2">Cantidad a Depositar ($)</label>
-                  <input type="number" id="depositAmount" min="0.01" step="0.01" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
-              </div>
-              <button type="submit" class="bg-green-600 text-white py-3 px-6 rounded-lg hover:bg-green-700 transition duration-300 w-full">
-                  <i class="fas fa-hand-holding-usd mr-2"></i>Realizar Depósito
-              </button>
-          </form>
-          <div id="depositResult" class="mt-4 p-4 rounded-lg hidden"></div>
+    <!-- Depositar Tab -->
+<div *ngIf="activeTab === 'deposit'">
+    <h3 class="text-2xl font-semibold mb-4 text-gray-800">Depositar Dinero</h3>
+    <form [formGroup]="depositForm" (ngSubmit)="onDepositar()">
+      <div class="mb-4">
+        <label class="block text-gray-700 mb-2">Número de Cuenta</label>
+        <input type="text" formControlName="cuentaId" class="w-full px-4 py-2 border rounded-lg">
       </div>
-
-      <!-- Withdraw Tab -->
-      <div *ngIf="activeTab === 'withdraw'">
-          <h3 class="text-2xl font-semibold mb-4 text-gray-800">Retirar Dinero</h3>
-          <form id="withdrawForm">
-              <div class="mb-4">
-                  <label for="withdrawAccountId" class="block text-gray-700 mb-2">Número de Cuenta</label>
-                  <input type="text" id="withdrawAccountId" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
-              </div>
-              <div class="mb-4">
-                  <label for="withdrawAmount" class="block text-gray-700 mb-2">Cantidad a Retirar ($)</label>
-                  <input type="number" id="withdrawAmount" min="0.01" step="0.01" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
-              </div>
-              <button type="submit" class="bg-yellow-600 text-white py-3 px-6 rounded-lg hover:bg-yellow-700 transition duration-300 w-full">
-                  <i class="fas fa-money-bill-wave mr-2"></i>Realizar Retiro
-              </button>
-          </form>
-          <div id="withdrawResult" class="mt-4 p-4 rounded-lg hidden"></div>
+      <div class="mb-4">
+        <label class="block text-gray-700 mb-2">Cantidad a Depositar ($)</label>
+        <input type="number" formControlName="monto" class="w-full px-4 py-2 border rounded-lg">
       </div>
-
-      <!-- Transfer Tab -->
-      <div *ngIf="activeTab === 'transfer'">
-          <h3 class="text-2xl font-semibold mb-4 text-gray-800">Transferir Dinero</h3>
-          <form id="transferForm">
-              <div class="mb-4">
-                  <label for="originAccountId" class="block text-gray-700 mb-2">Cuenta de Origen</label>
-                  <input type="text" id="originAccountId" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
-              </div>
-              <div class="mb-4">
-                  <label for="destinationAccountId" class="block text-gray-700 mb-2">Cuenta de Destino</label>
-                  <input type="text" id="destinationAccountId" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
-              </div>
-              <div class="mb-4">
-                  <label for="transferAmount" class="block text-gray-700 mb-2">Cantidad a Transferir ($)</label>
-                  <input type="number" id="transferAmount" min="0.01" step="0.01" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
-              </div>
-              <button type="submit" class="bg-purple-600 text-white py-3 px-6 rounded-lg hover:bg-purple-700 transition duration-300 w-full">
-                  <i class="fas fa-exchange-alt mr-2"></i>Realizar Transferencia
-              </button>
-          </form>
-          <div id="transferResult" class="mt-4 p-4 rounded-lg hidden"></div>
-      </div>
+      <button type="submit" class="bg-green-600 text-white py-3 px-6 rounded-lg hover:bg-green-700 w-full">
+        <i class="fas fa-hand-holding-usd mr-2"></i>Realizar Depósito
+      </button>
+    </form>
   </div>
+
+
+
+      <!-- Retirar Tab -->
+<div *ngIf="activeTab === 'withdraw'">
+    <h3 class="text-2xl font-semibold mb-4 text-gray-800">Retirar Dinero</h3>
+    <form [formGroup]="withdrawForm" (ngSubmit)="onRetirar()">
+      <div class="mb-4">
+        <label class="block text-gray-700 mb-2">Número de Cuenta</label>
+        <input type="text" formControlName="cuentaId" class="w-full px-4 py-2 border rounded-lg">
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 mb-2">Cantidad a Retirar ($)</label>
+        <input type="number" formControlName="monto" class="w-full px-4 py-2 border rounded-lg">
+      </div>
+      <button type="submit" class="bg-yellow-600 text-white py-3 px-6 rounded-lg hover:bg-yellow-700 w-full">
+        <i class="fas fa-money-bill-wave mr-2"></i>Realizar Retiro
+      </button>
+    </form>
+  </div>
+
+    <!-- Transferir Tab -->
+<div *ngIf="activeTab === 'transfer'">
+    <h3 class="text-2xl font-semibold mb-4 text-gray-800">Transferir Dinero</h3>
+    <form [formGroup]="transferForm" (ngSubmit)="onTransferir()">
+      <div class="mb-4">
+        <label class="block text-gray-700 mb-2">Cuenta de Origen</label>
+        <input type="text" formControlName="origenId" class="w-full px-4 py-2 border rounded-lg">
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 mb-2">Cuenta de Destino</label>
+        <input type="text" formControlName="destinoId" class="w-full px-4 py-2 border rounded-lg">
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 mb-2">Cantidad a Transferir ($)</label>
+        <input type="number" formControlName="monto" class="w-full px-4 py-2 border rounded-lg">
+      </div>
+      <button type="submit" class="bg-purple-600 text-white py-3 px-6 rounded-lg hover:bg-purple-700 w-full">
+        <i class="fas fa-exchange-alt mr-2"></i>Realizar Transferencia
+      </button>
+    </form>
+  </div>
+  <!-- Mensajes -->
+<div *ngIf="successMessage" class="mt-4 bg-green-100 text-green-700 p-4 rounded">{{ successMessage }}</div>
+<div *ngIf="errorMessage" class="mt-4 bg-red-100 text-red-700 p-4 rounded">{{ errorMessage }}</div>
+        </div>
+    
 </section>
