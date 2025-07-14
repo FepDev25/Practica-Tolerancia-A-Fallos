@@ -76,10 +76,10 @@ export class OperacionesComponent {
       this.errorMessage = 'Por favor complete todos los campos correctamente';
       return;
     }
-
+  
     this.usuarioService.registrarUsuarioConCuenta(this.createAccountForm.value).subscribe({
-      next: () => {
-        this.successMessage = 'Usuario creado correctamente';
+      next: (cuenta) => {
+        this.successMessage = `Usuario creado correctamente. Tu número de cuenta es: ${cuenta.id}`;
         this.errorMessage = '';
         this.createAccountForm.reset();
       },
@@ -89,6 +89,7 @@ export class OperacionesComponent {
       }
     });
   }
+  
 
   onLogin() {
     if (this.loginForm.invalid) {
@@ -133,52 +134,62 @@ export class OperacionesComponent {
 
   onDepositar() {
     if (this.depositForm.invalid) return;
+  
     const { cuentaId, monto } = this.depositForm.value;
-
-    this.transaccionService.depositar(cuentaId, monto).subscribe({
-      next: () => {
-        this.successMessage = `Depósito realizado: $${monto}`;
+  
+    this.transaccionService.depositar(Number(cuentaId), Number(monto)).subscribe({
+      next: (resp) => {
+        this.successMessage = `Depósito realizado correctamente. Nuevo saldo: $${resp.cuentaDestino?.saldo ?? 'actualizado'}`;
         this.errorMessage = '';
         this.depositForm.reset();
       },
-      error: () => {
-        this.errorMessage = 'Error al depositar';
+      error: (err) => {
+        console.error(err);
+        this.errorMessage = err.error?.message || 'Error al realizar el depósito';
         this.successMessage = '';
       }
     });
   }
+  
+  
 
   onRetirar() {
     if (this.withdrawForm.invalid) return;
+  
     const { cuentaId, monto } = this.withdrawForm.value;
-
-    this.transaccionService.retirar(cuentaId, monto).subscribe({
-      next: () => {
-        this.successMessage = `Retiro realizado: $${monto}`;
+  
+    this.transaccionService.retirar(Number(cuentaId), Number(monto)).subscribe({
+      next: (resp) => {
+        this.successMessage = `Retiro realizado correctamente. Nuevo saldo: $${resp.cuentaOrigen?.saldo ?? 'actualizado'}`;
         this.errorMessage = '';
         this.withdrawForm.reset();
       },
-      error: () => {
-        this.errorMessage = 'Fondos insuficientes o error';
+      error: (err) => {
+        console.error(err);
+        this.errorMessage = err.error?.message || 'Error al realizar el retiro';
         this.successMessage = '';
       }
     });
   }
+  
 
   onTransferir() {
     if (this.transferForm.invalid) return;
+  
     const { origenId, destinoId, monto } = this.transferForm.value;
-
-    this.transaccionService.transferir(origenId, destinoId, monto).subscribe({
-      next: () => {
-        this.successMessage = `Transferencia de $${monto} realizada`;
+  
+    this.transaccionService.transferir(Number(origenId), Number(destinoId), Number(monto)).subscribe({
+      next: (resp) => {
+        this.successMessage = `Transferencia realizada correctamente. Nuevo saldo origen: $${resp.cuentaOrigen?.saldo ?? 'actualizado'}`;
         this.errorMessage = '';
         this.transferForm.reset();
       },
-      error: () => {
-        this.errorMessage = 'Error en la transferencia';
+      error: (err) => {
+        console.error(err);
+        this.errorMessage = err.error?.message || 'Error al realizar la transferencia';
         this.successMessage = '';
       }
     });
   }
+  
 }
