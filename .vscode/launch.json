@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-BackendUpsbankApplication<backend-upsbank>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.cultodeportivo.backend_upsbank.BackendUpsbankApplication",
+            "projectName": "backend-upsbank",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
