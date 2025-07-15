@@ -1,4 +1,4 @@
-# Etapa de compilación
+# Etapa de construcción
 FROM node:20 AS build
 WORKDIR /app
 COPY package*.json ./
