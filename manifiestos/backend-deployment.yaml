@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: backend-upsbank
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: backend
@@ -12,6 +12,13 @@ spec:
       labels:
         app: backend
     spec:
+      initContainers:
+        - name: wait-for-db
+          image: postgres:13
+          command: ['sh', '-c', 'until pg_isready -h postgres -p 5432 -U felipep -d ups_bank; do echo waiting for database; sleep 2; done;']
+          env:
+            - name: PGPASSWORD
+              value: "mariapaz28"
       containers:
         - name: backend
           image: felipe2p05/backend-upsbank:latest
@@ -24,3 +31,15 @@ spec:
               value: "felipep"
             - name: SPRING_DATASOURCE_PASSWORD
               value: "mariapaz28"
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 5

@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: postgres
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: postgres
@@ -31,7 +31,8 @@ spec:
               mountPath: /docker-entrypoint-initdb.d/
       volumes:
         - name: postgres-storage
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: postgres-pv-claim
         - name: postgres-initdb
           configMap:
             name: postgres-init-scripts
