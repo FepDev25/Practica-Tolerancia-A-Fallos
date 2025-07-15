@@ -26,7 +26,6 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/cuenta")
-
 public class CuentaController {
 
     private final CuentaService cuentaService;
@@ -89,6 +88,5 @@ public class CuentaController {
         return cuentaEliminada.map(c -> ResponseEntity.ok(id))
                             .orElseGet(() -> ResponseEntity.notFound().build());
     }
-
 
 }

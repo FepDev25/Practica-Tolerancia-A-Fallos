@@ -18,7 +18,6 @@ import com.cultodeportivo.backend_upsbank.exceptions.UserNotFoundException;
 
 
 @RestControllerAdvice
-
 public class HandlerException {
 
     @ExceptionHandler(UserNotFoundException.class)
