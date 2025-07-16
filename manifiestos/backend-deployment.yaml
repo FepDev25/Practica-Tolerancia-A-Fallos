@@ -15,7 +15,7 @@ spec:
       initContainers:
         - name: wait-for-db
           image: postgres:13
-          command: ['sh', '-c', 'until pg_isready -h postgres -p 5432 -U felipep -d ups_bank; do echo waiting for database; sleep 2; done;']
+          command: ['sh', '-c', 'until pg_isready -h upsbank-db -p 5432 -U felipep -d ups_bank; do echo waiting for database; sleep 2; done;']
           env:
             - name: PGPASSWORD
               value: "mariapaz28"
@@ -26,7 +26,7 @@ spec:
             - containerPort: 8080
           env:
             - name: SPRING_DATASOURCE_URL
-              value: "jdbc:postgresql://postgres:5432/ups_bank"
+              value: "jdbc:postgresql://upsbank-db:5432/ups_bank"
             - name: SPRING_DATASOURCE_USERNAME
               value: "felipep"
             - name: SPRING_DATASOURCE_PASSWORD
@@ -35,11 +35,11 @@ spec:
             httpGet:
               path: /actuator/health
               port: 8080
-            initialDelaySeconds: 60
+            initialDelaySeconds: 120
             periodSeconds: 10
           readinessProbe:
             httpGet:
               path: /actuator/health
               port: 8080
-            initialDelaySeconds: 60
+            initialDelaySeconds: 120
             periodSeconds: 5

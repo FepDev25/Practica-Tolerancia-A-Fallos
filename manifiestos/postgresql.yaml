@@ -1,0 +1,24 @@
+apiVersion: "acid.zalan.do/v1"
+kind: postgresql
+metadata:
+  name: upsbank-db
+  namespace: default  # cámbialo si usas otro namespace
+spec:
+  teamId: "upsbank"
+  volume:
+    size: 1Gi
+  numberOfInstances: 2  # 1 líder + 1 réplica
+  users:
+    felipep:
+      - superuser
+  databases:
+    ups_bank: felipep
+  postgresql:
+    version: "15"
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
