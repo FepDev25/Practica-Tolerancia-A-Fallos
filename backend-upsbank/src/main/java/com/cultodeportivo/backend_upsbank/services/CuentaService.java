@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,12 +36,22 @@ public class CuentaService {
         return cuentaRepository.findAll();
     }
 
+    @Retryable(
+        value = { Exception.class }, 
+        maxAttempts = 3, 
+        backoff = @Backoff(delay = 2000)
+    )
     @Transactional(readOnly = true)
     public Cuenta findById(Long id) {
         return cuentaRepository.findById(id)
                 .orElseThrow(() -> new CuentaNotFoundException(id));
     }
 
+    @Retryable(
+        value = { Exception.class },
+        maxAttempts = 3,
+        backoff = @Backoff(delay = 1500)
+    )
     @Transactional
     public Cuenta save(CuentaDAO cuentaDAO) {
         Cuenta cuenta = new Cuenta();
@@ -69,28 +81,35 @@ public class CuentaService {
         return this.save(cuentaDAO);
     }
 
-
+    @Retryable(
+        value = { Exception.class },
+        maxAttempts = 3,
+        backoff = @Backoff(delay = 1000)
+    )
     @Transactional
-    public Optional<Cuenta> updateCuenta (Long id, CuentaDAO cuentaDAO) {
+    public Optional<Cuenta> updateCuenta(Long id, CuentaDAO cuentaDAO) {
         Optional<Cuenta> op = cuentaRepository.findById(id);
         if (op.isPresent()) {
             cuentaDAO.setId(id);
             return Optional.of(this.save(cuentaDAO));
-        } else{
+        } else {
             throw new CuentaNotFoundException(id);
         }
-        
     }
 
+    @Retryable(
+        value = { Exception.class },
+        maxAttempts = 3,
+        backoff = @Backoff(delay = 1000)
+    )
     @Transactional
-    public Optional<Cuenta> delete (Long id) {
+    public Optional<Cuenta> delete(Long id) {
         Optional<Cuenta> op = cuentaRepository.findById(id);
         if (op.isPresent()) {
             this.cuentaRepository.delete(op.get());
             return op;
-        } else{
+        } else {
             throw new CuentaNotFoundException(id);
         }
     }
-
 }

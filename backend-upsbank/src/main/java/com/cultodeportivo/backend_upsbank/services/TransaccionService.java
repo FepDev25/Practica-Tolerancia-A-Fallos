@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,11 +37,21 @@ public class TransaccionService {
         return this.transaccionRepository.findAll();
     }
 
+    @Retryable(
+        value = { Exception.class },
+        maxAttempts = 3,
+        backoff = @Backoff(delay = 2000)
+    )
     @Transactional(readOnly = true)
     public Optional<Transaccion> findById(Long id) {
         return this.transaccionRepository.findById(id);
     }
 
+    @Retryable(
+        value = { Exception.class },
+        maxAttempts = 3,
+        backoff = @Backoff(delay = 2000)
+    )
     @Transactional
     public Transaccion save(TransaccionDAO transaccionDAO) {
 
@@ -66,6 +78,11 @@ public class TransaccionService {
     }
 
 
+    @Retryable(
+        value = { Exception.class },
+        maxAttempts = 3,
+        backoff = @Backoff(delay = 2000)
+    )
     @Transactional
     public Optional<Transaccion> updateTransaccion (Long id, TransaccionDAO transaccionDAO) {
         Optional<Transaccion> op = transaccionRepository.findById(id);
@@ -76,6 +93,12 @@ public class TransaccionService {
         return Optional.empty();
     }
 
+
+    @Retryable(
+        value = { Exception.class },
+        maxAttempts = 3,
+        backoff = @Backoff(delay = 2000)
+    )
     @Transactional
     public Optional<Transaccion> delete (Long id) {
         Optional<Transaccion> op = findById(id);

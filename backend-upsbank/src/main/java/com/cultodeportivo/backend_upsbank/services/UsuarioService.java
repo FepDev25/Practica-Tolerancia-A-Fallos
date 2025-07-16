@@ -3,6 +3,8 @@ package com.cultodeportivo.backend_upsbank.services;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -27,18 +29,35 @@ public class UsuarioService {
         return this.userRepository.findAll();
     }
 
+
+    @Retryable(
+        value = { Exception.class },
+        maxAttempts = 3,
+        backoff = @Backoff(delay = 2000)
+    )
     @Transactional(readOnly = true)
     public Usuario findById(Long id) {
         return this.userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
     }
 
+
+    @Retryable(
+        value = { Exception.class },
+        maxAttempts = 3,
+        backoff = @Backoff(delay = 2000)
+    )
     @Transactional
     public Usuario saveUser(Usuario user) {
         user.setContrasena(passwordEncoder.encode(user.getContrasena()));
         return this.userRepository.save(user);
     }
 
+    @Retryable(
+        value = { Exception.class },
+        maxAttempts = 3,
+        backoff = @Backoff(delay = 2000)
+    )
     @Transactional
     public Optional<Usuario> updateUser (Long id, Usuario user){
         Usuario u = this.findById(id);
@@ -48,6 +67,11 @@ public class UsuarioService {
         return Optional.of(this.userRepository.save(u));
     }
 
+    @Retryable(
+        value = { Exception.class },
+        maxAttempts = 3,
+        backoff = @Backoff(delay = 2000)
+    )
     @Transactional
     public Optional<Usuario> delete (Long id) {
         Optional<Usuario> op = userRepository.findById(id);
@@ -58,6 +82,11 @@ public class UsuarioService {
         return Optional.empty();
     }
 
+    @Retryable(
+        value = { Exception.class },
+        maxAttempts = 3,
+        backoff = @Backoff(delay = 2000)
+    )
     @Transactional(readOnly = true)
     public Optional<Usuario> login(String correo, String contrasena) {
         Optional<Usuario> usuario = userRepository.findByCorreo(correo);
